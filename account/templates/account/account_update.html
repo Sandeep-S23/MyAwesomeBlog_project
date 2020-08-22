@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	
+	<style type="text/css">
+		.form-signin {
+		  width: 100%;
+		  max-width: 420px;
+		  padding: 15px;
+		  margin: auto;
+		}
+
+		.form-label-group {
+		  position: relative;
+		  margin-bottom: 1rem;
+		}
+
+		.form-label-group > input,
+		.form-label-group > label {
+		  height: 3.125rem;
+		  padding: .75rem;
+		}
+
+		.form-label-group > label {
+		  position: absolute;
+		  top: 0;
+		  left: 0;
+		  display: block;
+		  width: 100%;
+		  margin-bottom: 0; /* Override default `<label>` margin */
+		  line-height: 1.5;
+		  color: #495057;
+		  pointer-events: none;
+		  cursor: text; /* Match the input under the label */
+		  border: 1px solid transparent;
+		  border-radius: .25rem;
+		  transition: all .1s ease-in-out;
+		}
+
+		.form-label-group input::-webkit-input-placeholder {
+		  color: transparent;
+		}
+
+		.form-label-group input:-ms-input-placeholder {
+		  color: transparent;
+		}
+
+		.form-label-group input::-ms-input-placeholder {
+		  color: transparent;
+		}
+
+		.form-label-group input::-moz-placeholder {
+		  color: transparent;
+		}
+
+		.form-label-group input::placeholder {
+		  color: transparent;
+		}
+
+		.form-label-group input:not(:placeholder-shown) {
+		  padding-top: 1.25rem;
+		  padding-bottom: .25rem;
+		}
+
+		.form-label-group input:not(:placeholder-shown) ~ label {
+		  padding-top: .25rem;
+		  padding-bottom: .25rem;
+		  font-size: 12px;
+		  color: #777;
+		}
+
+		.blog-posts{
+			max-width: 500px;
+			width: 100%;
+			margin: auto;
+		}
+
+		/* Fallback for Edge
+		-------------------------------------------------- */
+		@supports (-ms-ime-align: auto) {
+		  .form-label-group > label {
+		    display: none;
+		  }
+		  .form-label-group input::-ms-input-placeholder {
+		    color: #777;
+		  }
+		}
+
+		/* Fallback for IE
+		-------------------------------------------------- */
+		@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+		  .form-label-group > label {
+		    display: none;
+		  }
+		  .form-label-group input:-ms-input-placeholder {
+		    color: #777;
+		  }
+		}
+	</style>
+
+	<form class="form-signin" method="post">{% csrf_token %}
+	  <div class="text-center mb-4">
+	    <h1 class="h3 mb-3 font-weight-normal">Account</h1>
+	  </div>
+
+	  <div class="form-label-group">
+	    <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus value="{{ account_form.initial.email }}">
+	    <label for="inputEmail">Email address</label>
+	  </div>
+
+	  <div class="form-label-group">
+	    <input type="text" name="username" id="inputUsername" class="form-control" placeholder="username" required value="{{ account_form.initial.username }}">
+	    <label for="inputUsername">Username </label>
+	  </div>
+
+	  {% for field in account_form %}
+			<p>
+				{% for error in field.errors %}
+					<p style="color: #b80c00;">{{ error }}</p>
+				{% endfor %}
+			</p>	
+			{% endfor %}
+
+			{% if account_form.non_field_errors %}
+				<div style="color: #b80c00;">
+					<p>{{ account_form.non_field_errors }}</p>
+				</div>
+			{% endif %}
+
+			{% if success_message %}
+				<p style="color: green; text-align: center;">{{ success_message }}</p>
+			{% endif %}
+
+	  <button class="btn btn-lg btn-primary btn-block" type="submit">Save Changes</button>
+	</form>
+
+	<div class="d-flex flex-column">
+		<a class="m-auto" href="{% url 'password_change' %}">Change Password</a>
+	</div>
+
+	<div class="container mt-4 p-4">
+		<div class="row">
+			<div class="blog-posts">
+				<h3 class="mb-3 font-weight-normal">Blog Posts: </h3>
+				{% if blog_posts %}
+					<ul>
+						{% for post in blog_posts %}
+							<a href="{% url 'blog:detail' post.slug %}" style="text-decoration: none;">
+								<li class="list-group-item">{{ post }}</li>
+							</a>
+						{% endfor %}
+					</ul>
+				{% else %}
+					<p>You don't have any Blog Posts yet. Create a post <a href="{% url 'blog:create' %}">here</a>.</p>	
+				{% endif %}
+			</div>
+		</div>
+	</div>
+{% endblock content %}

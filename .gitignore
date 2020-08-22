@@ -1,0 +1,12 @@
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+/media_cdn
+venv
+/static/
+/static_cdn/
+/account/api/
+/blog/api/
